@@ -25,11 +25,7 @@ for (const variable of arr) {
 
 console.log(typeof (arr[arr.length - 1])); // з цікавості дивимся на що перетворився наш boolean при додавання до нього 10
 
-let firstName, middleName, lastName;
-firstName = 'Oleksandr';
-middleName = 'Sergiovich';
-lastName = 'Hutsenko';
-
+let firstName = 'Oleksandr', middleName = 'Sergiovich', lastName = 'Hutsenko';
 let person = firstName + ' ' + middleName + ' ' + lastName;  // конкактинуєм
 console.log(person);
 
@@ -41,10 +37,7 @@ age = prompt('Your Age', '99');
 document.writeln('<br>');           // аби розділити рядки
 document.writeln(`Вітаю ${first_name} ${middle_name}. Тобі ${age} років. :)`) // виконуєм інтерполяцію
 
-let a, b, c;
-a = 100;
-b = '100';
-c = true;
+let a = 100, b = '100', c = true;
 console.log(typeof(a));
 console.log(typeof(b));
 console.log(typeof(c));
@@ -61,8 +54,7 @@ console.log(10 !== 10);     // -> false
 console.log(123 === '123'); // -> false
 console.log(123 == '123');  // -> true
 
-let str = "20";
-let num = 5;
+let str = "20", num = 5;
 document.writeln('<br>');
 document.write(str + num + "<br/>");    // ну цей результат був очікуваним, конкантинація строк, якщо в доданках є хоть одна строка
 document.write(str - a + "<br/>");      // наступні результати неочікувані, думаю, що коли інтерпритатор бачить матиматичну дію(крім додавання), то
