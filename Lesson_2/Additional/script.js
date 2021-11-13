@@ -10,7 +10,7 @@ else if ((num_2 > num_1 && num_2 < num_3) || (num_2 < num_1 && num_2 > num_3)) d
 else if ((num_3 > num_2 && num_3 < num_1) || (num_3 < num_2 && num_3 > num_1)) document.write(' => Третє число середуще<br>');
 else document.write(' => Якісь із чисел рівні за значенням<br>');
 
-((num_1 > num_2 && num_1 < num_3) || (num_1 > num_3 && num_1 < num_2)) ? document.write('Переше число серед двох інших по номіналу<br>') : document.write('Уви, переше число не середуще<br>');
+((num_1 > num_2 && num_1 < num_3) || (num_1 > num_3 && num_1 < num_2)) ? document.write('Перше число серед двох інших по номіналу<br>') : document.write('Уви, переше число не середуще<br>');
 
 let result, a = 3, b = 2;
 result = (a + b < 4) ? 'Мало' : 'Багато';
