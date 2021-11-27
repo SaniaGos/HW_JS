@@ -1,63 +1,89 @@
-// - створити функцію, яка якщо приймає один аргумент, просто вивдоить його, якщо два аргументи - складає або конкатенує їх між собою.
-function concatEveryone() {
-    let tmp = 0;
-    Array.from(arguments).forEach(element => {tmp += element});
-    return tmp;
+// - Дано натуральное число n. Выведите все числа от 1 до n.
+const showNaturalNum = (n) => {
+    if (!(typeof (n) === 'number')) return;
+    for (let i = 0; i < n; i++) {
+        document.write(`${i + 1}, `);
+        console.log(i + 1);
+    }
+    document.write('<br>');
 }
+showNaturalNum(10);
 
-console.log(concatEveryone(12, true, 'hello', 15, {age: 15, name: 'Sasa'}));
-console.log(concatEveryone(12, 99, -100));
+// - Даны два целых числа A и В . Выведите все числа от A до B включительно, в порядке возрастания, если A < B, или в порядке убывания в противном случае.
+const showNumberBetween = (A, B) => {
+    const showNum = (i) => {
+        document.write(`${i}, `);
+        console.log(i);
+    }
+    if (A < B) for (let i = A; i <= B; i++) showNum(i);
+    else if (A > B) for (let i = A; i >= B; i--) showNum(i);
+    else showNum(A);
+    document.write('<br>');
+}
+showNumberBetween(5, 10);
+showNumberBetween(5, -10);
 
-// - створити функцію  яка приймає два масиви та скаладає значення елементів з однаковими індексами  та повертає новий результуючий масив.
-//     EXAMPLE:
-//     [1,2,3,4]
-//     [2,3,4,5]
-// результат
-//     [3,5,7,9]
-function sumElementArr(arr_1, arr_2) {
-    let tmp = [];
-    if (Array.isArray(arr_1) && Array.isArray(arr_2)) {
-        let size = arr_1.length > arr_2.length ? arr_1.length : arr_2.length;
-        for (let i = 0; i < size; i++) {
-            tmp.push((arr_1[i] ||= 0) + (arr_2[i] ||= 0));          // тут виконана хитра перевірка на наявність елементу в масиві
+// -   функція Приймає масив та число "i", та міняє місцями об`єкт який знаходиться в індексі "i" на "i+1"
+//   EXAMPLE:
+//   foo([9,8,0,4], 0) // ==> [ 8, 9, 0, 4 ]
+//   foo([9,8,0,4], 1) // ==> [ 9 ,0, 8, 4 ]
+//   foo([9,8,0,4], 2) // ==> [ 9, 8, 4, 0 ]
+const arrSwap = (arr, num) => {
+    if (!Array.isArray(arr) || arr.length < num) return;
+    let tmp = arr[num + 1];
+    arr[num + 1] = arr[num];
+    arr[num] = tmp;
+}
+let arr = [9, 8, 0, 4];
+arrSwap(arr, 0);
+console.log(arr);
+arr = [9, 8, 0, 4];
+arrSwap(arr, 1);
+console.log(arr);
+arr = [9, 8, 0, 4];
+arrSwap(arr, 2);
+console.log(arr);
+
+// - Сворити функцію яка буде переносити елементи з значенням 0 у кінець маисву. Зберігаючи при цьому порядок не нульових значень.
+// Двожина масиву від 2 до 100
+// EXAMPLE:
+// [1,0,6,0,3] => [1,6,3,0,0]
+// [0,1,2,3,4] => [1,2,3,4,0]
+// [0,0,1,0]   => [1,0,0,0]
+
+const arrZeroReplace = (arr) => {       // цей варіант виглядає красиво, але дуже затратний по ресурсам
+    if (!Array.isArray(arr)) return;
+    let length = arr.length;
+    for (let i = 0; i < length; i++) {
+        if (arr[i] === 0) {
+            arr.splice(i, 1);   // видаляєм елемент з масиву;
+            arr.push(0);        // поміщаєм його в кінець
+            length--;           // вкорочуєм ітерацію, для чого нам перевіряти елементи, які і так нульові;
+            i--;                // так як внас масив зсунувся, то нам треба перевірити щераз ту саму позицію
         }
     }
-    return tmp;
 }
+arr = [1,0,6,0,4,0,0,3];
+arrZeroReplace(arr);
+console.log(arr)
 
-console.log(sumElementArr([1, 2, 3, 4], [2, 3, 4, 5]));              // виконує поставлене завдання
-console.log(sumElementArr([1, 2, 3, 4], [2, 3, 4, 5, 10, 12]));        // працює навіть з масивами різної довжини
-console.log(sumElementArr(['Hello', undefined, 3, 4], [' okten', 3, 4, true, 10, 'some text']));      // а тут взагалі треш і воно працює, як треба
-
-// - Створити функцію яка приймає масив будь яких объектів, та повертає масив ключів всіх обєктів
-// EXAMPLE:
-//     [{name: 'Dima', age: 13}, {model: 'Camry'}]  ===> [ name, age, model ]
-function objectKeys(objectArr) {
-    let tmp = [];
-    if (Array.isArray(objectArr)) {
-        objectArr.forEach(element => {
-            Object.keys(element).forEach(el => {
-                tmp.push(el)
-            });
-        })
+const arrZeroReplaceV2 = (arr) => {         // цей варіант набагато економніший до ресурсів
+    if (!Array.isArray(arr)) return;
+    let tmpArr = new Array(arr.length);     // створюємо новий масив довжиною входящого
+    let i = 0;                              // запускаєм ітератор для цього масиву
+    arr.forEach(el => {
+        if (el !== 0){                      // всі елементи відмінні від нуля записуємо в новий масив по порядку
+            tmpArr[i] = el;
+            i++;                            // не забуваєм при цьому зробити інкрементацію
+        }
+    })
+    for ( ; i < tmpArr.length; i++) {       // і останнє, решта елементів заповняємо нулями
+        tmpArr[i] = 0;
     }
-    return tmp;
-}
-console.log(objectKeys([{name: 'Dima', age: 13}, {model: 'Camry'}]))
-
-
-// - Створити функцію яка приймає масив будь яких объектів, та повертає масив значень всіх обєктів
-// EXAMPLE:
-//     [{name: 'Dima', age: 13}, {model: 'Camry'}]  ===> [ Dima, 13, Camry ]
-function objectValues(objectArr) {
-    let tmp = [];
-    if (Array.isArray(objectArr)) {
-        objectArr.forEach(element => {
-            Object.values(element).forEach(el => {
-                tmp.push(el)
-            });
-        })
+    for (let i in tmpArr) {                 // а не остайнє, це перезаписуєм вхідний масив
+        arr[i] = tmpArr[i];                 // на жаль запис arr = tmpArr на працює, бо у нас в функції копія ссилки, зміна якої нам нічого не дасть
     }
-    return tmp;
 }
-console.log(objectValues([{name: 'Dima', age: 13}, {model: 'Camry'}]))
+arr = [1,0,6,0,4,0,0,3];
+arrZeroReplaceV2(arr);
+console.log(arr)
