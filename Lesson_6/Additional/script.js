@@ -1,89 +1,118 @@
-// - Дано натуральное число n. Выведите все числа от 1 до n.
-const showNaturalNum = (n) => {
-    if (!(typeof (n) === 'number')) return;
-    for (let i = 0; i < n; i++) {
-        document.write(`${i + 1}, `);
-        console.log(i + 1);
-    }
-    document.write('<br>');
-}
-showNaturalNum(10);
-
-// - Даны два целых числа A и В . Выведите все числа от A до B включительно, в порядке возрастания, если A < B, или в порядке убывания в противном случае.
-const showNumberBetween = (A, B) => {
-    const showNum = (i) => {
-        document.write(`${i}, `);
-        console.log(i);
-    }
-    if (A < B) for (let i = A; i <= B; i++) showNum(i);
-    else if (A > B) for (let i = A; i >= B; i--) showNum(i);
-    else showNum(A);
-    document.write('<br>');
-}
-showNumberBetween(5, 10);
-showNumberBetween(5, -10);
-
-// -   функція Приймає масив та число "i", та міняє місцями об`єкт який знаходиться в індексі "i" на "i+1"
-//   EXAMPLE:
-//   foo([9,8,0,4], 0) // ==> [ 8, 9, 0, 4 ]
-//   foo([9,8,0,4], 1) // ==> [ 9 ,0, 8, 4 ]
-//   foo([9,8,0,4], 2) // ==> [ 9, 8, 4, 0 ]
-const arrSwap = (arr, num) => {
-    if (!Array.isArray(arr) || arr.length < num) return;
-    let tmp = arr[num + 1];
-    arr[num + 1] = arr[num];
-    arr[num] = tmp;
-}
-let arr = [9, 8, 0, 4];
-arrSwap(arr, 0);
-console.log(arr);
-arr = [9, 8, 0, 4];
-arrSwap(arr, 1);
-console.log(arr);
-arr = [9, 8, 0, 4];
-arrSwap(arr, 2);
-console.log(arr);
-
-// - Сворити функцію яка буде переносити елементи з значенням 0 у кінець маисву. Зберігаючи при цьому порядок не нульових значень.
-// Двожина масиву від 2 до 100
-// EXAMPLE:
-// [1,0,6,0,3] => [1,6,3,0,0]
-// [0,1,2,3,4] => [1,2,3,4,0]
-// [0,0,1,0]   => [1,0,0,0]
-
-const arrZeroReplace = (arr) => {       // цей варіант виглядає красиво, але дуже затратний по ресурсам
-    if (!Array.isArray(arr)) return;
-    let length = arr.length;
-    for (let i = 0; i < length; i++) {
-        if (arr[i] === 0) {
-            arr.splice(i, 1);   // видаляєм елемент з масиву;
-            arr.push(0);        // поміщаєм його в кінець
-            length--;           // вкорочуєм ітерацію, для чого нам перевіряти елементи, які і так нульові;
-            i--;                // так як внас масив зсунувся, то нам треба перевірити щераз ту саму позицію
+// - Напишите функцию cutString(str, n), которая делит строку на подстроки, состоящие из n символов.
+function cutString(str, numOFCut) {
+    let tmp = [];
+    for (let i = 0; i < str.length; i++) {
+        if (i % numOFCut === 0) {
+            tmp.push(str.slice(i, (i + numOFCut)));
         }
     }
+    return tmp;
 }
-arr = [1,0,6,0,4,0,0,3];
-arrZeroReplace(arr);
-console.log(arr)
 
-const arrZeroReplaceV2 = (arr) => {         // цей варіант набагато економніший до ресурсів
-    if (!Array.isArray(arr)) return;
-    let tmpArr = new Array(arr.length);     // створюємо новий масив довжиною входящого
-    let i = 0;                              // запускаєм ітератор для цього масиву
-    arr.forEach(el => {
-        if (el !== 0){                      // всі елементи відмінні від нуля записуємо в новий масив по порядку
-            tmpArr[i] = el;
-            i++;                            // не забуваєм при цьому зробити інкрементацію
-        }
+document.writeln(cutString('наслаждение', 3)) // [нас,лаж,ден,ие]
+
+// - Створити функцію-валідатор для адрес електронної пошти. Перевірка повинна включати в себе :данні до знака равлика(@), наявність равлика, крапку яка знаходиться не меньше ніж на 2 символ далі після равлика, функція не чутлива до регістру (some@email.com,SOME@EMAIL.COM,some@EMAIL.com, і тд - однакові значення)
+// Протестувати на значеннях
+// someemail@gmail.com
+// someeMAIL@gmail.com
+// someeMAIL@i.ua
+// some.email@gmail.com
+//
+// Примітка
+// Для тих, хто дуже розумний, та почне використовувати регулярні вирази одразу "ні". Своїм мозком подумайте над протоколом, з регулярками будете потім бавитись.
+function emailValidator(str) {                                          // функція не досконала, але програму мінімум робить
+    str.toLowerCase();                                                  // робим емеіл не чутливим до регістру
+    if (str[0] === '.' || str[str.length - 1] === '.') return false;    // якщо десь по краях є крапка, емеіл не валідний
+    let rememberSymbolPos = 0;                                          // створюєм запамятовувальну позицію спец символа (крапки або равлика)
+    for (let i = 0; i < str.length; i++) {
+        if (str[i] === '.' || str[i] === '@') {                          // перевіряєм чи елемент належить до спец символа
+            if ((rememberSymbolPos + 1) === i) return false;            // якщо так, то відразу перевіряєм чи попередній символ також спец, якщо так, емеіл не валідний
+            else rememberSymbolPos = i;                                 // інакше перезаписуєм позицію спец символа
+        } else if (str[i] === ' ') return false;                          // і на останнє, якщо в емеіл є пробіл від зразу не валідний
+    }
+    return true;
+}
+
+console.log(emailValidator('someemail@gmail.com'));
+console.log(emailValidator('someeMAIL@gmail.com'));
+console.log(emailValidator('someeMAIL@i.ua'));
+console.log(emailValidator('some.email@gmail.com'));
+console.log(emailValidator('some.ema il@gmail.com'));       // пробіл => false
+console.log(emailValidator('some.email@@gmail.com'));       // два равлика підряд => false
+console.log(emailValidator('some..email@gmail.com'));       // дві крапки підряд => false
+
+// - є масив
+let coursesArray = [
+    {
+        title: 'JavaScript Complex',
+        monthDuration: 5,
+        hourDuration: 909,
+        modules: ['html', 'css', 'js', 'mysql', 'mongodb', 'react', 'angular', 'aws', 'docker', 'git', 'node.js']
+    },
+    {
+        title: 'Java Complex',
+        monthDuration: 6,
+        hourDuration: 909,
+        modules: ['html', 'css', 'js', 'mysql', 'mongodb', 'angular', 'aws', 'docker', 'git', 'java core', 'java advanced']
+    },
+    {
+        title: 'Python Complex',
+        monthDuration: 6,
+        hourDuration: 909,
+        modules: ['html', 'css', 'js', 'mysql', 'mongodb', 'angular', 'aws', 'docker', 'python core', 'python advanced']
+    },
+    {
+        title: 'QA Complex',
+        monthDuration: 4,
+        hourDuration: 909,
+        modules: ['html', 'css', 'js', 'mysql', 'mongodb', 'git', 'QA/QC']
+    },
+    {
+        title: 'FullStack',
+        monthDuration: 7,
+        hourDuration: 909,
+        modules: ['html', 'css', 'js', 'mysql', 'mongodb', 'react', 'angular', 'aws', 'docker', 'git', 'node.js', 'python', 'java']
+    },
+    {
+        title: 'Frontend',
+        monthDuration: 4,
+        hourDuration: 909,
+        modules: ['html', 'css', 'js', 'mysql', 'mongodb', 'react', 'angular', 'aws', 'docker', 'git', 'sass']
+    }
+];
+
+// відсортувати його в спадаючому порядку за кількістю елементів в полі modules
+console.log(coursesArray.sort((a, b) => b.modules.length - a.modules.length));
+
+// - Напишіть функцію count(str, stringsearch), яка повертає кількість символів stringsearch у рядку str.
+function count(str, stringSearch) {
+    let i = 0, numOfSearch = 0;
+    if (!stringSearch) return numOfSearch;
+    while (true) {
+        if (!str.includes(stringSearch, i)) return numOfSearch;
+        i = str.indexOf(stringSearch, i);
+        numOfSearch++;
+        i += stringSearch.length;
+    }
+}
+
+console.log(count('Lorem ipsum dolor sit amet.', 'o'));
+console.log(count('sa sa sa sa sa', 'sa'));
+console.log(count('sa sa sa sa sa', ''));
+
+
+let symbol = "о", str = "Астрономия это наука о небесных объектах";
+document.write('<br>');
+document.writeln(count(str, symbol)); // 5
+
+// - Напишіть функцію cutString(str, n), яка видаляє зайві слова з рядка str, залишивши у ній n слів.
+function cutString_(str, n){
+    let newStr = '';
+    str.split(' ').map((val, i) => {
+        if (i < n) newStr += ` ${val}`;
     })
-    for ( ; i < tmpArr.length; i++) {       // і останнє, решта елементів заповняємо нулями
-        tmpArr[i] = 0;
-    }
-    for (let i in tmpArr) {                 // а не остайнє, це перезаписуєм вхідний масив
-        arr[i] = tmpArr[i];                 // на жаль запис arr = tmpArr на працює, бо у нас в функції копія ссилки, зміна якої нам нічого не дасть
-    }
+    return newStr;
 }
-arr = [1,0,6,0,4,0,0,3];
-arrZeroReplaceV2(arr);
-console.log(arr)
+str = "Сила тяжести приложена к центру масс тела";
+document.write('<br>');
+document.writeln(cutString_(str, 5)) // 'Сила тяжести приложена к центру'
