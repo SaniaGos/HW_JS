@@ -12,7 +12,8 @@ function classListOfDocument(obj, emptyList = []) {         // оно работ
             classListOfDocument(child, emptyList);                // тут саме запуск рекурсії
         }
     }
-    return emptyList;                                             // вертаєм готовий список, є одна лажа, це повторювані класи, можна створити ще одну функцію, яка відфільтрує повторювальні елементи, але мені влом :)
+    //return emptyList;                                             // вертаєм готовий список, є одна лажа, це повторювані класи, можна створити ще одну функцію, яка відфільтрує повторювальні елементи, але мені влом :)
+    return emptyList.filter((element, index, array) => array.indexOf(element) === index);       // не, всетаки зробив фільтрацію дублікатів
 }
 
 let list = classListOfDocument(document.body);

@@ -1,103 +1,280 @@
-const TransactionType = Object.freeze({
-    PUT:   Symbol("Put Credits"),
-    TAKE:  Symbol("Take Credits"),
-    LIMIT: Symbol("Set Transaction Limit")
-});
+//- Є масив :
 
-class Transaction {
-    constructor(type, credits, balance, complete, descriptions) {
-        this.transactionType = type;
-        this.credits = credits;
-        this.balance = balance;
-        this.time = new Date();
-        this.complete = complete;
-        this.descriptions = descriptions ||= '';
-    }
-}
-
-class Card {
-    constructor() {
-        this.balance = 100;
-        this.transactionLimit = 100;
-        this.historyLog = [];
-        //this.key = cardKey;
-    };
-
-    putCredits(money) {
-        if (typeof (money) === 'number' && money > 0) {
-            this.balance += money;
-            this.historyLog.push(new Transaction(TransactionType.PUT, money, this.balance, true));
-            return true;
-        }
-        return false;
-    };
-
-    takeCredits(money) {
-        if (typeof (money) === 'number' && money <= this.transactionLimit) {
-            if (money <= this.balance) {
-                this.balance -= money;
-                this.historyLog.push(new Transaction(TransactionType.TAKE, money, this.balance, true));
-                return true;
+let usersList = [
+    {
+        id: 1,
+        name: 'Leanne Graham',
+        username: 'Bret',
+        email: 'Sincere@april.biz',
+        address: {
+            street: 'Kulas Light',
+            suite: 'Apt. 556',
+            zipcode: '92998-3874',
+            geo: {
+                lat: '-37.3159',
             }
-            this.historyLog.push(new Transaction(TransactionType.TAKE, money, this.balance, false, 'Insufficient funds on the card'));
-            console.error(`Insufficient funds on the card.  Operation time ${new Date()}`);
-            return false;
+        },
+        car: {
+            model: 'Kangoo',
+            brand: 'Renault',
+            year: '2012'
+        },
+        phone: '1-770-736-8031 x56442',
+        website: 'hildegard.org',
+        company: {
+            name: 'Romaguera-Crona',
+            catchPhrase: 'Multi-layered client-server neural-net',
+            bs: 'harness real-time e-markets'
         }
-        this.historyLog.push(new Transaction(TransactionType.TAKE, money, this.balance, false,'Card transaction limit exceeded.'));
-        console.error(`Card transaction limit exceeded.  Operation time ${new Date()}`);
-        return false;
-    };
+    },
+    {
+        id: 2,
+        name: 'Ervin Howell',
+        username: 'Antonette',
+        email: 'Shanna@melissa.tv',
+        address: {
+            street: 'Victor Plains',
+            suite: 'Suite 879',
+            city: 'Wisokyburgh',
+            zipcode: '90566-7771',
+            geo: {
+                lat: '-43.9509',
+                lng: '-34.4618'
+            }
+        },
+        phone: '010-692-6593 x09125',
+        website: 'anastasia.net',
+        company: {
+            name: 'Deckow-Crist',
+            catchPhrase: 'Proactive didactic contingency',
+            bs: 'synergize scalable supply-chains'
+        }
+    },
+    {
+        id: 3,
+        name: 'Clementine Bauch',
+        username: 'Samantha',
+        email: 'Nathan@yesenia.net',
+        address: {
+            street: 'Douglas Extension',
+            city: 'McKenziehaven',
+            zipcode: '59590-4157',
+            geo: {
+                lat: '-68.6102',
+                lng: '-47.0653'
+            }
+        },
+        phone: '1-463-123-4447',
+        website: 'ramiro.info',
+        company: {
+            catchPhrase: 'Face to face bifurcated interface',
+            bs: 'e-enable strategic applications'
+        }
+    },
+    {
+        id: 4,
+        name: 'Patricia Lebsack',
+        username: 'Karianne',
+        email: 'Julianne.OConner@kory.org',
+        address: {
+            street: 'Hoeger Mall',
+            suite: 'Apt. 692',
+            city: 'South Elvis',
+            zipcode: '53919-4257',
+            geo: {
+                lat: '29.4572',
+                lng: '-164.2990'
+            }
+        },
+        phone: '493-170-9623 x156',
+        website: 'kale.biz',
+        company: {
+            name: 'Robel-Corkery',
+            catchPhrase: 'Multi-tiered zero tolerance productivity',
+            bs: 'transition cutting-edge web services'
+        }
+    },
+    {
+        id: 5,
+        name: 'Chelsey Dietrich',
+        username: 'Kamren',
+        email: 'Lucio_Hettinger@annie.ca',
+        address: {
+            street: 'Skiles Walks',
+            suite: 'Suite 351',
+            city: 'Roscoeview',
+            zipcode: '33263',
+            geo: {
+                lat: '-31.8129',
+                lng: '62.5342'
+            }
+        },
+        phone: '(254)954-1289',
+        website: 'demarco.info',
+        company: {
+            name: 'Keebler LLC',
+            catchPhrase: 'User-centric fault-tolerant solution',
+            bs: 'revolutionize end-to-end systems'
+        }
+    },
+    {
+        id: 6,
+        name: 'Mrs. Dennis Schulist',
+        username: 'Leopoldo_Corkery',
+        email: 'Karley_Dach@jasper.info',
+        address: {
+            street: 'Norberto Crossing',
+            suite: 'Apt. 950',
+            city: 'South Christy',
+            zipcode: '23505-1337',
+            geo: {
+                lat: '-71.4197',
+                lng: '71.7478'
+            }
+        },
+        phone: '1-477-935-8478 x6430',
+        website: 'ola.org',
+        company: {
+            name: 'Considine-Lockman',
+            catchPhrase: 'Synchronised bottom-line interface',
+            bs: 'e-enable innovative applications'
+        }
+    },
+    {
+        id: 7,
+        name: 'Kurtis Weissnat',
+        username: 'Elwyn.Skiles',
+        email: 'Telly.Hoeger@billy.biz',
+        address: {
+            street: 'Rex Trail',
+            suite: 'Suite 280',
+            city: 'Howemouth',
+            zipcode: '58804-1099',
+            geo: {
+                lat: '24.8918',
+                lng: '21.8984'
+            }
+        },
+        phone: '210.067.6132',
+        website: 'elvis.io',
+        company: {
+            name: 'Johns Group',
+            catchPhrase: 'Configurable multimedia task-force',
+            bs: 'generate enterprise e-tailers'
+        }
+    },
+    {
+        id: 8,
+        name: 'Nicholas Runolfsdottir V',
+        username: 'Maxime_Nienow',
+        email: 'Sherwood@rosamond.me',
+        address: {
+            street: 'Ellsworth Summit',
+            suite: 'Suite 729',
+            city: 'Aliyaview',
+            zipcode: '45169',
+            geo: {
+                lat: '-14.3990',
+                lng: '-120.7677'
+            }
+        },
+        phone: '586.493.6943 x140',
+        website: 'jacynthe.com',
+        company: {
+            name: 'Abernathy Group',
+            catchPhrase: 'Implemented secondary concept',
+            bs: 'e-enable extensible e-tailers'
+        }
+    },
+    {
+        id: 9,
+        name: 'Glenna Reichert',
+        username: 'Delphine',
+        email: 'Chaim_McDermott@dana.io',
+        address: {
+            street: 'Dayna Park',
+            suite: 'Suite 449',
+            city: 'Bartholomebury',
+            zipcode: '76495-3109',
+            geo: {
+                lat: '24.6463',
+                lng: '-168.8889'
+            }
+        },
+        phone: '(775)976-6794 x41206',
+        website: 'conrad.com',
+        company: {
+            name: 'Yost and Sons',
+            catchPhrase: 'Switchable contextually-based project',
+            bs: 'aggregate real-time technologies'
+        }
+    },
+    {
+        id: 10,
+        name: 'Clementina DuBuque',
+        username: 'Moriah.Stanton',
+        email: 'Rey.Padberg@karina.biz',
+        address: {
+            street: 'Kattie Turnpike',
+            suite: 'Suite 198',
+            city: 'Lebsackbury',
+            zipcode: '31428-2261',
+            geo: {
+                lat: '-38.2386',
+                lng: '57.2232'
+            }
+        },
+        phone: '024-648-3804',
+        website: 'ambrose.net',
+        company: {
+            name: 'Hoeger LLC',
+            catchPhrase: 'Centralized empowering task-force',
+            bs: 'target end-to-end models'
+        }
 
-    setTransactionLimit(money) {
-        if (typeof (money) === 'number' && money >= 0) {
-            this.transactionLimit = money;
-            this.historyLog.push(new Transaction(TransactionType.LIMIT, money, this.balance, true));
-            return true;
-        }
-        return false;
     }
+];
 
-    transferCredits(money, destinationCard) {
-        if (destinationCard instanceof Card && this.takeCredits(money * 1.005)){
-            destinationCard.putCredits(money);
-            return true;
+// Створити під кожен елемент окремий блок. В цьому блоці, під кожну властивість, та властивості внутрішніх об'єктів створити свої окремі блок.
+
+let message = document.createElement('h1');
+message.textContent = 'Написав універсальну фу-ю на любий масив будь яких обєктів, використав рекурсію, масив трохи змінив, код працює'
+document.body.appendChild(message);
+
+function showUsers(arrObj) {
+    let myDiv = document.createElement('div');
+    for (const user of arrObj) {
+        let userDiv = document.createElement('div');
+
+        let objWrite = (el) => {
+            let keys = Object.keys(el);                                 // берем властивості обєкту
+            let objDiv = document.createElement('div');         // створюєм для юзера елемент div
+            for (const key of keys) {                                   // проганяєм властивості
+                let keyDiv = document.createElement('div');     // створюєм для властивості елемент div
+                keyDiv.style.display = 'flex';                          // трохи стилізуєм
+
+                if (typeof (el[key]) === "object") {                    // перевіряєм, чи за властиваістю не сховався обєкт
+                    let name = document.createElement('h3');
+                    name.textContent = key;
+                    name.style.width = '100px';
+                    keyDiv.appendChild(name);                           // берем її імя і добавляєм в div, трошки стилізуєм
+                    keyDiv.appendChild(objWrite(el[key]));              // якщо властивість виявилася обєктом то виконуєм рекурсію, яка верне нам блок з даними
+                } else {
+                    let name = document.createElement('h3');    // інакше, якщо властивість не обєкт, то добавляєм її в блок
+                    name.textContent = key;
+                    name.style.width = '100px';
+                    let value = document.createElement('h4');
+                    value.style.color = 'red';
+                    value.textContent = el[key];
+                    keyDiv.append(name, value);
+                }
+                objDiv.appendChild(keyDiv);                             // добавляєм властивіть з данами в батьківський блок
+            }
+            return objDiv;                                             // вертаєм цей самий блок
         }
-        //console.error(`Destination Card from other bank, can't make a transaction`)
+        myDiv.appendChild(objWrite(user));                      // друкуєм в HTML
     }
-}
-class UserAccount{
-    constructor(name) {
-        this.name = name;
-        this.cards = [];
-    };
-
-    addCard(){
-        if (this.cards.length < 3)
-            this.cards.push(new Card());
-        else
-            console.error('Number of cards exceeded')
-    };
-
-    getCardByKey(num){
-        if (num <= this.cards.length && num > 0) return this.cards[num - 1];
-        else{
-            console.error('Card not found');
-            return null;
-        }
-    };
+    document.body.appendChild(myDiv);
 }
 
-
-let user = new UserAccount('Sania');
-user.addCard();
-user.addCard();
-
-user.getCardByKey(1).setTransactionLimit(500);
-user.getCardByKey(1).putCredits(1500);
-user.getCardByKey(1).transferCredits(455, user.getCardByKey(2));
-user.getCardByKey(1).transferCredits(555, user.getCardByKey(2));
-user.getCardByKey(1).setTransactionLimit(1500);
-user.getCardByKey(1).transferCredits(755, user.getCardByKey(2));
-user.getCardByKey(1).transferCredits(755, user.getCardByKey(2));
-
-console.log(user);
+showUsers(usersList);
