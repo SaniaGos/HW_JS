@@ -243,8 +243,7 @@ document.body.appendChild(message);
 
 function showUsers(arrObj) {
     let myDiv = document.createElement('div');
-    for (const user of arrObj) {
-        let userDiv = document.createElement('div');
+    for (const obj of arrObj) {
 
         let objWrite = (el) => {
             let keys = Object.keys(el);                                 // берем властивості обєкту
@@ -270,11 +269,11 @@ function showUsers(arrObj) {
                 }
                 objDiv.appendChild(keyDiv);                             // добавляєм властивіть з данами в батьківський блок
             }
-            return objDiv;                                             // вертаєм цей самий блок
+            return objDiv;                                              // вертаєм цей самий блок
         }
-        myDiv.appendChild(objWrite(user));                      // друкуєм в HTML
+        myDiv.appendChild(objWrite(obj));                               // викликаєм нашу внутрішню фу-ю
     }
-    document.body.appendChild(myDiv);
+    document.body.appendChild(myDiv);                           // друкуєм в HTML
 }
 
 showUsers(usersList);
